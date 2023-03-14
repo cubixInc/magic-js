@@ -5,6 +5,7 @@ export enum OAuthPayloadMethods {
 }
 
 export type OAuthProvider =
+  | 'shoaib'
   | 'google'
   | 'facebook'
   | 'apple'
