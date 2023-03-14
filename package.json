@@ -83,7 +83,7 @@
   "resolutions": {
     "@rollup/plugin-commonjs": "^17.0.0"
   },
-  "repository": "magiclabs/magic-js",
+  "repository": "cubixInc/magic-js",
   "author": "Magic Labs <team@magic.link>",
   "auto": {
     "plugins": [
