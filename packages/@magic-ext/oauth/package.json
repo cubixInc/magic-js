@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/magiclabs/magic-js"
+    "url": "https://github.com/cubixInc/magic-js"
   },
   "files": [
     "dist"
