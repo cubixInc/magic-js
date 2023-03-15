@@ -31,15 +31,24 @@ export class OAuthExtension extends Extension.Internal<'oauth'> {
     });
   }
 
-  public getRedirectResult() {
-    const queryString = window.location.search;
+  public async getOAuthMetadata() {
+    const json: string = (await this.utils.storage.getItem(OAUTH_REDIRECT_METADATA_KEY)) as string;
+
+    // Remove the save OAuth state from storage, it stays in memory now...
+    this.utils.storage.removeItem(OAUTH_REDIRECT_METADATA_KEY);
+
+    return json;
+  }
+
+  public getRedirectResult(queryString: string, metadata: string) {
+    // const queryString = window.location.search;
 
     // Remove the query from the redirect callback as a precaution to prevent
     // malicious parties from parsing it before we have a chance to use it.
-    const urlWithoutQuery = window.location.origin + window.location.pathname;
-    window.history.replaceState(null, '', urlWithoutQuery);
+    // const urlWithoutQuery = window.location.origin + window.location.pathname;
+    // window.history.replaceState(null, '', urlWithoutQuery);
 
-    return getResult.call(this, queryString);
+    return getResult.call(this, queryString, metadata);
   }
 }
 
@@ -86,14 +95,14 @@ async function createURI(this: OAuthExtension, configuration: OAuthRedirectConfi
   };
 }
 
-function getResult(this: OAuthExtension, queryString: string) {
+function getResult(this: OAuthExtension, queryString: string, metadata: string) {
   return this.utils.createPromiEvent<OAuthRedirectResult>(async (resolve, reject) => {
-    const json: string = (await this.utils.storage.getItem(OAUTH_REDIRECT_METADATA_KEY)) as string;
+    // const json: string = (await this.utils.storage.getItem(OAUTH_REDIRECT_METADATA_KEY)) as string;
 
-    const { verifier, state } = JSON.parse(json);
+    const { verifier, state } = JSON.parse(metadata);
 
     // Remove the save OAuth state from storage, it stays in memory now...
-    this.utils.storage.removeItem(OAUTH_REDIRECT_METADATA_KEY);
+    // this.utils.storage.removeItem(OAUTH_REDIRECT_METADATA_KEY);
 
     const parseRedirectResult = this.utils.createJsonRpcRequestPayload(OAuthPayloadMethods.ParseRedirectResult, [
       queryString,
